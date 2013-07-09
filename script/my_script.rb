@@ -65,7 +65,6 @@ class ContactClient
       case choice
       when 1
         add_contact
-
       when 2
         update_contact
       when 3
