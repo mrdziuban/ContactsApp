@@ -8,7 +8,7 @@ class AuthenticatesController < ApplicationController
     if user.password == password
       user.token = SecureRandom.urlsafe_base64(8)
       user.save!
-      render json: user.token
+      render text: user.token
     else
       render json: user.errors, status: :unauthorized
     end
