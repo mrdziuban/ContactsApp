@@ -16,22 +16,19 @@ class ContactsController < ApplicationController
     render :json => user.contacts
   end
 
+  # Needs failing error codes
+
   def update
-    user = User.find(params[:user_id])
-    contact = user.contacts.find(params[:id])
+    contact = Contact.find(params[:id])
     contact.update_attributes(params[:contact])
 
     render json: contact
   end
 
   def destroy
-    user = User.find(params[:user_id])
-    contact = user.contacts.find(params[:id])
+    contact = Contact.find(params[:id])
     contact.destroy
-    render text: "deleted"
-  end
 
-  def belongs_to_user?(user_id, contact)
-    contact.user_id == user_id
+    render text: "deleted"
   end
 end
