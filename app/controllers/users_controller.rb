@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_filter :authenticate, except: [:create,:index,:show]
+
   def index
     render :json => User.all
   end
@@ -17,16 +19,19 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.update(params[:id], params[:user])
+    user = current_user.update_attributes(params[:user])
+
     if user
-      render json: user
+      render text: "Update successful"
     else
       render json: user.errors, status: :not_acceptable
     end
   end
 
+  # Error catches
+
   def destroy
-    User.destroy(params[:id])
+    user = current_user.destroy
     render text: "deleted"
   end
 end

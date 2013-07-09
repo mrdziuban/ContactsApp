@@ -1,14 +1,12 @@
 class FavoritesController < ApplicationController
-  # Show contact values for user's favorites
+  before_filter :authenticate
+
   def index
-    user = User.find(params[:user_id])
-    favorites = user.favorites
-    render json: favorites
+    render json: current_user.favorites
   end
 
   def create
-    user = User.find(params[:user_id])
-    favorite = user.favorites.build(contact_id: params[:contact_id])
+    favorite = current_user.favorites.build(contact_id: params[:contact_id])
 
     if favorite.save
       render json: favorite
@@ -20,8 +18,12 @@ class FavoritesController < ApplicationController
   # Needs a failing error code
   def destroy
     favorite = Favorite.find(params[:id])
-    favorite.destroy
 
-    render text: "deleted"
+    if favorite.user_id == current_user.id
+      favorite.destroy
+      render text: "deleted"
+    else
+      render text: "You can't delete that favorite!"
+    end
   end
 end

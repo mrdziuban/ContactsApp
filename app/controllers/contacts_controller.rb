@@ -1,8 +1,8 @@
 class ContactsController < ApplicationController
+  before_filter :authenticate
+
   def create
-    # params[:user_id] is associated user_id
-    user = User.find(params[:user_id])
-    contact = user.contacts.build(params[:contact])
+    contact = current_user.contacts.build(params[:contact])
 
     if contact.save
       render json: contact
@@ -12,23 +12,30 @@ class ContactsController < ApplicationController
   end
 
   def index
-    user = User.find(params[:user_id])
-    render :json => user.contacts
+    render :json => current_user.contacts
   end
 
   # Needs failing error codes
 
   def update
     contact = Contact.find(params[:id])
-    contact.update_attributes(params[:contact])
 
-    render json: contact
+    if contact.user_id == current_user.id
+      contact.update_attributes(params[:contact])
+      render json: contact
+    else
+      render text: "That's not your contact!"
+    end
   end
 
   def destroy
     contact = Contact.find(params[:id])
-    contact.destroy
 
-    render text: "deleted"
+    if contact.user_id == current_user.id
+      contact.destroy
+      render text: "deleted"
+    else
+      render text: "You can't delete that user!"
+    end
   end
 end
