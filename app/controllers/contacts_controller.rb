@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_filter :authenticate
+  before_filter :authenticate, except: [:search]
 
   def create
     contact = current_user.contacts.build(params[:contact])
@@ -26,6 +26,15 @@ class ContactsController < ApplicationController
     else
       render text: "That's not your contact!"
     end
+  end
+
+  def search
+    name = params[:name]
+    address = params[:address]
+    email = params[:email]
+    phone_number = params[:phone_number]
+
+    render json: Contact.where("name LIKE '%#{name}%' AND address LIKE '%#{address}%' AND email LIKE '%#{email}%' AND phone_number LIKE '%#{phone_number}%'")
   end
 
   def destroy

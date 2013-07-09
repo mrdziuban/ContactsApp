@@ -7,6 +7,9 @@ FirstControllers::Application.routes.draw do
 
   resources :contacts, only: [:update,:destroy] do
     resources :favorites, only: [:destroy]
+    collection do
+      get "search" => "contacts#search"
+    end
   end
 
   resources :authenticates, only: [:create,:destroy]
