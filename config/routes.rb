@@ -1,6 +1,9 @@
 FirstControllers::Application.routes.draw do
 
-  resources :users
+  resources :users do
+    resources :contacts, except: [:show]
+    resources :favorites, except: [:show, :update]
+  end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

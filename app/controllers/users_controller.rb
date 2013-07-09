@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.update(params[:id],params[:user])
+    user = User.update(params[:id], params[:user])
     if user
       render json: user
     else
@@ -27,6 +27,6 @@ class UsersController < ApplicationController
 
   def destroy
     User.destroy(params[:id])
-    render json: "deleted"
+    render text: "deleted"
   end
 end
